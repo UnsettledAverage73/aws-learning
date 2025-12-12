@@ -60,3 +60,44 @@ resource "aws_s3_bucket_website_configuration" "website" {
 output "website_url" {
   value = aws_s3_bucket_website_configuration.website.website_endpoint
 }
+
+# 1. Zip the Python code automatically
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_file = "hello.py"
+  output_path = "lambda_function.zip"
+}
+# 2. Create the IAM Role (The "ID Card")
+resource "aws_iam_role" "iam_for_lambda" {
+  name = "learning_lambda_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+# 3. Create the Lambda Function
+resource "aws_lambda_function" "test_lambda" {
+  # Point to the zip file created above
+  filename      = "lambda_function.zip"
+  function_name = "my_learning_function"
+  role          = aws_iam_role.iam_for_lambda.arn
+  handler       = "hello.lambda_handler" # filename.function_name
+
+  # Tell AWS this zip file changed (so it updates the code)
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+
+  runtime = "python3.9"
+}
