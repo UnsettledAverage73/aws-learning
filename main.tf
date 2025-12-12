@@ -1,10 +1,10 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region # Uses varible
 }
 
 # 1. Create the Key Pair in AWS (using the key you just generated)
 resource "aws_key_pair" "deployer" {
-  key_name = "deployer-key"
+  key_name = var.key_name
   # This points to the public key file on your Mac/Linux machine
   public_key = file("~/.ssh/terraform_key.pub")
 }
@@ -37,8 +37,8 @@ resource "aws_security_group" "web_sg" {
 
 # 2. create the server
 resource "aws_instance" "my_server" {
-  ami           = "ami-0c7217cdde317cfec" #amazon linux 23 (free tier for us-east-1)
-  instance_type = "t2.micro"
+  ami           = var.ami_id #amazon linux 23 (free tier for us-east-1)
+  instance_type = var.instance_type
   # ATTACH THE KEY HERE
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
@@ -63,10 +63,5 @@ resource "aws_instance" "my_server" {
   tags = {
     Name = "My-Learning-Box"
   }
-}
-
-# 3. Output the IP address 
-output "server_ip" {
-  value = aws_instance.my_server.public_ip
 }
 
