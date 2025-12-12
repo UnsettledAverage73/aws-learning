@@ -1,3 +1,18 @@
+# 1. Ask AWS: "Give me the latest Ubuntu 22.04 AMI"
+data "aws_ami" "latest_ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # This is Canonical's ID (Creators of Ubuntu)
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
 provider "aws" {
   region = var.aws_region # Uses varible
 }
@@ -37,7 +52,7 @@ resource "aws_security_group" "web_sg" {
 
 # 2. create the server
 resource "aws_instance" "my_server" {
-  ami           = var.ami_id #amazon linux 23 (free tier for us-east-1)
+  ami           = data.aws_ami.latest_ubuntu.id #ubuntu latest_ubuntu (free tier for us-east-1)
   instance_type = var.instance_type
   # ATTACH THE KEY HERE
   key_name               = aws_key_pair.deployer.key_name
