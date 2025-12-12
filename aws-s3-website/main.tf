@@ -67,25 +67,10 @@ data "archive_file" "lambda_zip" {
   source_file = "hello.py"
   output_path = "lambda_function.zip"
 }
-# 2. Create the IAM Role (The "ID Card")
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "learning_lambda_role"
 
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+# ADD THIS (Find the role the teachers made for you)
+data "aws_iam_role" "lab_role" {
+  name = "LabRole"
 }
 
 # 3. Create the Lambda Function
@@ -93,7 +78,7 @@ resource "aws_lambda_function" "test_lambda" {
   # Point to the zip file created above
   filename      = "lambda_function.zip"
   function_name = "my_learning_function"
-  role          = aws_iam_role.iam_for_lambda.arn
+  role          = data.aws_iam_role.lab_role.arn
   handler       = "hello.lambda_handler" # filename.function_name
 
   # Tell AWS this zip file changed (so it updates the code)
