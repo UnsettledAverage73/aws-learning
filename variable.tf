@@ -9,7 +9,12 @@ variable "instance_type" {
   type        = string
   default     = "t2.micro" # Free tier eligible
 }
-
+variable "ami_id" {
+  description = "AMI ID for Ubuntu 22.04"
+  type        = string
+  # Use the ID we know works in us-east-1
+  default = "ami-0c7217cdde317cfec"
+}
 variable "key_name" {
   description = "Name of the SSH key pair"
   type        = string
