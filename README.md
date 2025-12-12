@@ -73,7 +73,7 @@ terraform apply
 2. Deploying Serverless App
 Note: In restricted lab environments, use the target flag if S3 errors occur.
 
-```
+
 ```Bash
 
 cd aws-s3-serverless
@@ -85,9 +85,11 @@ visitors
 3. Cleaning Up (Cost Management)
 To prevent unexpected AWS charges, always destroy resources after the session.
 
-Bash
+
+```Bash
 
 terraform destroy --auto-approve
+```
 💡 Lessons Learned
 Ephemerality: Infrastructure should be treated as disposable. We successfully destroyed and rebuilt environments in minutes.
 
