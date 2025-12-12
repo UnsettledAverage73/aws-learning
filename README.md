@@ -46,6 +46,7 @@ We moved away from the "Default VPC" to build a secure, isolated network foundat
 └── aws-vpc-learning/          # Phase 3: Networking
     └── main.tf                # VPC, Subnets, Route Tables
 
+```
 Challenge,Error / Symptom,Solution
 SSH Access,Permission denied (publickey),Fixed local key permissions (chmod 400) and corrected OS username (ec2-user vs ubuntu).
 Region Lock,UnauthorizedOperation in us-east-2,Detected Student Lab restrictions; reverted deployment to us-east-1 (N. Virginia).
