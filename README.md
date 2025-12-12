@@ -78,9 +78,8 @@ Note: In restricted lab environments, use the target flag if S3 errors occur.
 
 cd aws-s3-serverless
 terraform init
-terraform apply -target=aws_lambda_function.test_lambda -target=aws_dynamodb_table.
+terraform apply -target=aws_lambda_function.test_lambda -target=aws_dynamodb_table.visitors
 ```
-visitors
 # Output: Lambda Function URL
 3. Cleaning Up (Cost Management)
 To prevent unexpected AWS charges, always destroy resources after the session.
@@ -90,7 +89,9 @@ To prevent unexpected AWS charges, always destroy resources after the session.
 
 terraform destroy --auto-approve
 ```
-💡 Lessons Learned
+
+# 💡 Lessons Learned
+
 Ephemerality: Infrastructure should be treated as disposable. We successfully destroyed and rebuilt environments in minutes.
 
 State Management: Never commit .tfstate files to GitHub; they contain secrets.
