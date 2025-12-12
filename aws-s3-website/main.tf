@@ -108,7 +108,7 @@ resource "aws_lambda_function" "test_lambda" {
   # Point to the zip file created above
   filename      = "lambda_function.zip"
   function_name = "my_learning_function"
-  role          = data.aws_iam_role.lab_role.arn
+  role          = "arn:aws:iam::637423406602:role/LabRole"
   handler       = "hello.lambda_handler" # filename.function_name
 
   # Tell AWS this zip file changed (so it updates the code)
