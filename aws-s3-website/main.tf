@@ -86,3 +86,20 @@ resource "aws_lambda_function" "test_lambda" {
 
   runtime = "python3.9"
 }
+
+# 1. Create the Function URL
+resource "aws_lambda_function_url" "test_live" {
+  function_name      = aws_lambda_function.test_lambda.function_name
+  authorization_type = "NONE" # Publicly accessible
+
+  cors {
+    allow_credentials = true
+    allow_origins     = ["*"] # Allow any website to call this (for learning)
+    allow_methods     = ["*"]
+  }
+}
+
+# 2. Output the URL so we can see it
+output "api_url" {
+  value = aws_lambda_function_url.test_live.function_url
+}
