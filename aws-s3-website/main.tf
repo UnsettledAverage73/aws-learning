@@ -43,7 +43,37 @@ resource "aws_s3_bucket_acl" "example" {
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.my_bucket.id
   key          = "index.html"
-  content      = "<h1>Hello from S3 Serverless Hosting!</h1>"
+  content      = <<EOF
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Serverless Demo</title>
+    <style>body { font-family: sans-serif; text-align: center; margin-top: 50px; }</style>
+</head>
+<body>
+    <h1>My Cloud Resume</h1>
+    <button onclick="callLambda()">Call Backend</button>
+    <p id="result">Waiting...</p>
+
+    <script>
+        async function callLambda() {
+            // Terraform automatically pastes the URL here:
+            const apiUrl = "${aws_lambda_function_url.test_live.function_url}";
+            
+            document.getElementById("result").innerText = "Calling...";
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                // Lambda returns a string body, so we display that
+                document.getElementById("result").innerText = data.body; 
+            } catch (error) {
+                document.getElementById("result").innerText = "Error: " + error;
+            }
+        }
+    </script>
+</body>
+</html>
+EOF
   content_type = "text/html"
   acl          = "public-read"
 }
