@@ -47,14 +47,14 @@ We moved away from the "Default VPC" to build a secure, isolated network foundat
     └── main.tf                # VPC, Subnets, Route Tables
 
 ```
-Challenge,Error / Symptom,Solution
-SSH Access,Permission denied (publickey),Fixed local key permissions (chmod 400) and corrected OS username (ec2-user vs ubuntu).
-Region Lock,UnauthorizedOperation in us-east-2,Detected Student Lab restrictions; reverted deployment to us-east-1 (N. Virginia).
-IAM Privileges,iam:CreateRole Access Denied,Replaced resource creation with a data source to utilize the pre-existing LabRole.
-S3 Policy,s3:GetBucketPolicy Access Denied,Utilized Terraform target flags (-target=...) to bypass blocked S3 read operations and deploy only Lambda/DynamoDB.
+###  Challenge,Error / Symptom,Solution
+* SSH Access,Permission denied (publickey),Fixed local key permissions (chmod 400) and corrected OS username (ec2-user vs ubuntu).
+* Region Lock,UnauthorizedOperation in us-east-2,Detected Student Lab restrictions; reverted deployment to us-east-1 (N. Virginia).
+* IAM Privileges,iam:CreateRole Access Denied,Replaced resource creation with a data source to utilize the pre-existing LabRole.
+* S3 Policy,s3:GetBucketPolicy Access Denied,Utilized Terraform target flags (-target=...) to bypass blocked S3 read operations and deploy only Lambda/DynamoDB.
 
 
-🛠 Usage Instructions
+# 🛠 Usage Instructions
 Prerequisites
 Terraform installed (v1.x+)
 
@@ -63,20 +63,24 @@ AWS CLI configured with credentials
 Git
 
 1. Deploying Compute (EC2)
-Bash
-
+```Bash
 cd aws-ec2-learning
 terraform init
 terraform apply
+```
+
 # Output: Website URL and Public IP
 2. Deploying Serverless App
 Note: In restricted lab environments, use the target flag if S3 errors occur.
 
-Bash
+```
+```Bash
 
 cd aws-s3-serverless
 terraform init
-terraform apply -target=aws_lambda_function.test_lambda -target=aws_dynamodb_table.visitors
+terraform apply -target=aws_lambda_function.test_lambda -target=aws_dynamodb_table.
+```
+visitors
 # Output: Lambda Function URL
 3. Cleaning Up (Cost Management)
 To prevent unexpected AWS charges, always destroy resources after the session.
