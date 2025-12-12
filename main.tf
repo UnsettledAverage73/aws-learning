@@ -43,13 +43,22 @@ resource "aws_instance" "my_server" {
   key_name               = aws_key_pair.deployer.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
   # INSTALL WEB SERVER ON STARTUP
+  # user_data = <<-EOF
+  #             #!/bin/bash
+  #             yum update -y
+  #             yum install -y httpd
+  #             systemctl start httpd
+  #             systemctl enable httpd
+  #             echo "<h1>Hello from Terraform!</h1>" > /var/www/html/index.html
+  #             EOF
+  # NEW (Ubuntu) - ADD THIS
   user_data = <<-EOF
               #!/bin/bash
-              yum update -y
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Hello from Terraform!</h1>" > /var/www/html/index.html
+              apt update -y
+              apt install -y apache2
+              systemctl start apache2
+              systemctl enable apache2
+              echo "<h1>Hello from the Ubuntu Automation!</h1>" > /var/www/html/index.html
               EOF
   tags = {
     Name = "My-Learning-Box"
